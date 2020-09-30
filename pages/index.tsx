@@ -1,36 +1,40 @@
-import { useRouter, withRouter } from "next/router";
-import { Heading, Link, Stack, Flex, Box, SimpleGrid,Text } from "@chakra-ui/core";
-import axios from 'axios';
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-} from "@chakra-ui/core";
-
-const HomeX = ({ posts }) => {
-  const { query: { username, password } } = useRouter()
+import axios from "axios";
+import dbConnect from "../utils/dbConnects";
+import branch from "../model/branchModel";
+import { Select,Flex,Box } from "@chakra-ui/core";
+import { useRouter } from "next/dist/client/router";
+const Index = (data) => {
+  const router = useRouter()
+  console.log(router.route)
   return (
-    <>
-      <SimpleGrid columns={[1,null,2,4]} spacing="40px">
-        {posts.map((user, index) => (
-          <Box shadow="md" borderWidth="1px" p={5}>
-            <div key={index}>
-            <Heading fontSize="xl">{user.title}</Heading>
-              <Text mt={4}>{user.body}</Text>
-            </div>
-          </Box>
-
+    <Flex justify="center">
+ 
+    
+    <Box w="450px">
+      <h2> WELCOME TO IFSC  CODE</h2>      
+      <Select placeholder="Select bank" onChange={(e)=>{
+          router.push(`/${e.target.value}`)
+        //  window.location.assign(`/district/${selectx}`)
+      }} >
+        {data.bankNameData.map((value,index)=>(
+            <option key={index} value={value}>{value}</option>
         ))}
-      </SimpleGrid>
-    </>
-  )
-}
+      </Select>
+    </Box>
+    </Flex>
+  );
+};
 
-HomeX.getInitialProps = async (ctx) => {
-  const res = await axios.get('https://jsonplaceholder.typicode.com/posts')
-  const json = await res.data
-  return { posts: json }
-}
+export async function getServerSideProps(context: any) {
+  await dbConnect();
 
-export default HomeX;
+  console.log(process.env.secretkey)
+
+  const bankNameData = await branch.distinct("bank");
+  console.log(bankNameData);
+  // console.log("getServerProps", res, context.params, context.query);
+  return {
+    props: { bankNameData },
+  };
+}
+export default Index;

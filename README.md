@@ -1,27 +1,93 @@
-This is a starter template for [Learn Next.js](https://nextjs.org/learn).
+
+import { useRouter } from 'next/router'
+=============================================
+import { useState } from 'react';
+import bankx from "../utils/bank";
+
+ interface BanksInteface {
+  iFSCCode?: string;
+  bank?: string;
+  branch?: string;
+  mICRNo?: string;
+  branchCode?: string;
+  sWIFTCode?: string;
+  address?: string;
+  pINCode?: string;
+  district?: string;
+  state?: string;
+  contact?: string;
+  emailID?: string;
+  customerCare?: string;
+}
+
+const Banks = ({ stars }) => {
+    const [selectx, setSelect] = useState('')
+    const router = useRouter()
+    console.log(router.route)
+  return (
+    <>
+    <h2>{selectx}</h2>
+      <select value={selectx} onChange={(e)=>{
+          setSelect(e.target.value)
+          router.push(`/district/${e.target.value}`)
+        
+        //  window.location.assign(`/district/${selectx}`)
+      }}>
+        {stars.map(function (value, index) {
+            if (value === 'select') {
+              return (
+                <option key={index}>{value}</option>
+              );
+            } else {
+              return (
+                <option value={value} key={index}>{value}</option>
+              );
+            }
+          }
+        )}
+      </select>
+    </>
+  );
+};
+Banks.getInitialProps = async (ctx) => {
+
+  let district = ['select'];
+  bankx.forEach((value, index) => {
+    // remove duplicate string from existing array and create new array
+    if (!district.includes(value.district)) {
+      district.push(value.district);
+    }
+  });
+
+  return { stars: district };
+};
+
+export default Banks;
 
 
-For basic use
-`npx create-next-app nextjs-blog --use-npm --example "https://github.com/vercel/next-learn-starter/tree/master/learn-starter"`
+======================================================================
+export async function getServerSideProps(context: any) {
+    await dbConnect()
+    const datax = await Quote.find({})
+    // console.log(JSON.stringify(datax))
+    let xx = JSON.stringify(datax);
+    let yy = JSON.parse(xx)
 
-How to use mongodb with nextjs
-need to following packages
--  npm i -s @typegoose/typegoose -> install typegoose itself
--  npm i -s mongoose -> nstall peer-dependencie mongoose
--  npm i -D @types/mongoose -> install all types for mongoose - this is required for typegoose to work in typescript
+    // console.log("getServerProps", res, context.params, context.query);
+    return {
+        props: { yy }
+    };
+}
 
-For custom server
-need to install following packages
- - npm install express
- - npm install --save-dev @types/node @types/express
+===========================================================================
+ <SimpleGrid columns={[1,null,2,4]} spacing="40px">
+        {posts.map((user, index) => (
+          <Box shadow="md" borderWidth="1px" p={5} key={index}>
+         
+            <Heading fontSize="xl">{user.title}</Heading>
+              <Text mt={4}>{user.body}</Text>
+        
+          </Box>
 
- ```javascript
-
- export default App = () => {
-     return 
-     <>
-        <h1> welcome to page </h1>
-     </>
- }
-
- ```
+        ))}
+      </SimpleGrid>
