@@ -9,7 +9,7 @@ async function dbConnect() {
   }
 
   /* connecting to our database */
-  const db = await mongoose.connect('mongodb+srv://dc-web:Z4XC4DgA9v1mVkP6@cluster0-khych.mongodb.net/Org?retryWrites=true&w=majority', {
+  const db = await mongoose.connect(`mongodb+srv://dc-web:${process.env.SECRET_KEY}@cluster0-khych.mongodb.net/Org?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
