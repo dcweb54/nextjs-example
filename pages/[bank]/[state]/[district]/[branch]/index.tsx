@@ -12,7 +12,7 @@ const Index = (data) => {
   return (
       <Flex justify="center">
           
-          <Box >
+          <Box w="450px">
           {branchDetails['iFSCCode']}
         {
             Object.keys(branchDetails).map((value,index)=>(
