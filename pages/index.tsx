@@ -28,7 +28,8 @@ const Index = (data) => {
 export async function getServerSideProps(context: any) {
   await dbConnect();
 
-  console.log(process.env.secretkey)
+  console.log(process.env.MONGO_DB)
+  console.log(process.env.MONGO_URL)
 
   const bankNameData = await branch.distinct("bank");
   console.log(bankNameData);
